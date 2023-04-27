@@ -5,13 +5,14 @@ extern char **environ;
  *main - entry point
  *Return: int
  */
-int main(void)
+int main(int argc, char **argv)
 {
 char *lineptr, **env = environ, delimiter = ' ', **av;
 char *path = getenv("PATH"), *dir = strtok(path, ":"), filepath[256];
 size_t n;
 int i;
 pid_t pid = -1;
+(void)argc;
 
 lineptr = malloc(sizeof(lineptr) * 256);
 if (!lineptr)
@@ -29,8 +30,6 @@ if (errno == EOF)
 printf("\n");
 break;
 }
-/* Handle other errors */
-perror(NULL);
 errno = 0; /* Reset errno to avoid endless loop */
 break;
 }
@@ -64,7 +63,10 @@ dir = strtok(NULL, ":");
 if (isatty(STDIN_FILENO))
 {
 /*interactive mode*/
+if (access(filepath, X_OK) == 0)
 pid = fork();
+else
+perror("./shell");
 if (*(av[0]) != '/')
 interact(pid, filepath, av, env);
 else
@@ -76,12 +78,11 @@ else
 if (execve(av[0], av, env) == -1)
 {
 /*Handle error*/
-perror("./shell");
+printf("%s: %d: %s: not found\n",argv[0], argc, av[0]);
 errno = 0;
+break;
 }
-/**/
 }
-/**/
 }
 free(lineptr);
 return (0);
