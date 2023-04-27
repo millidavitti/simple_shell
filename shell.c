@@ -11,7 +11,7 @@ char *lineptr, **env = environ, delimiter = ' ', **av;
 char *path = getenv("PATH"), *dir = strtok(path, ":"), filepath[256];
 size_t n;
 int i;
-pid_t pid;
+pid_t pid = -1;
 
 lineptr = malloc(sizeof(lineptr) * 256);
 if (!lineptr)
@@ -43,15 +43,18 @@ for (env = environ; *env != NULL; env++)
 printf("%s\n", *env);
 continue;
 }
-
 av = _strtok(lineptr, delimiter);
 for (i = 0; av[i][0]; i++)
 ;
 av[i] = NULL;
 
+if (!dir){
+dir = strtok(path, ":");
+}
+
 while (dir)
 {
-sprintf(filepath, "%s/%s", dir, av[0]);
+sprintf(filepath, "%s/%s", "/usr/bin", av[0]);
 if (access(filepath, X_OK) == 0)
 /* Found the executable */
 break;
@@ -62,7 +65,10 @@ if (isatty(STDIN_FILENO))
 {
 /*interactive mode*/
 pid = fork();
+if (*(av[0]) != '/')
 interact(pid, filepath, av, env);
+else
+interact(pid, av[0], av, env);
 }
 else
 {
@@ -73,7 +79,9 @@ if (execve(av[0], av, env) == -1)
 perror("./shell");
 errno = 0;
 }
+/**/
 }
+/**/
 }
 free(lineptr);
 return (0);
