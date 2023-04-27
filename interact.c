@@ -1,5 +1,11 @@
 #include "main.h"
-
+/**
+ *interact - handles shell interactivity
+ *@pid: child process or parent process fork
+ *@filepath: binary file path
+ *@av: arguments
+ *@env: environ
+ */
 void interact(pid_t pid, char *filepath, char **av, char **env)
 {
 if (pid == -1)
