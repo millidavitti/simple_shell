@@ -1,13 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-
-void store(char *string, int start, int end, char *array)
-{
-int i, j = 0;
-
-for (i = start; i < end; i++, j++)
-array[j] = string[i];
-}
+#include "main.h"
 
 char **_strtok(char *string, char delimiter)
 {

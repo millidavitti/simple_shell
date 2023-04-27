@@ -9,6 +9,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-void directories(void);
 char **_strtok(char *string, char delimiter);
+void store(char *string, int start, int end, char *array);
 #endif /*MAIN_H*/
