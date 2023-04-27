@@ -11,4 +11,5 @@
 
 char **_strtok(char *string, char delimiter);
 void store(char *string, int start, int end, char *array);
+void interact(pid_t pid, char *filepath, char **av, char **env);
 #endif /*MAIN_H*/
